@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';$u=user();$s=db()->prepare('SELECT r.*,p.name,p.unique_identifier,s.profit FROM returns r JOIN products p ON p.id=r.product_id JOIN sales s ON s.id=r.sale_id WHERE r.seller_id=? ORDER BY r.returned_at DESC');$s->execute([$u['id']]);out(['success'=>true,'returns'=>$s->fetchAll()]);

@@ -1,0 +1,1 @@
+import api from './api';export const sales=()=>api.get('/sales/list.php');export const newSale=d=>api.post('/sales/create.php',d);export const returns=()=>api.get('/returns/list.php');export const newReturn=d=>api.post('/returns/create.php',d);export const report=p=>api.get('/sales/report.php',{params:{period:p}});

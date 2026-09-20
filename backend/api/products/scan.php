@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';$u=user();$id=trim($_GET['identifier']??'');if(!$id)fail('Identifier is required');$s=db()->prepare('SELECT * FROM products WHERE unique_identifier=?');$s->execute([$id]);$p=$s->fetch();out(['success'=>true,'exists'=>(bool)$p,'product'=>$p?product_row($p):null,'can_sell'=>$p&&$p['user_id']==$u['id']&&$p['status']==='available']);

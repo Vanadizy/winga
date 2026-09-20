@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';$u=user();$d=body();required($d,['request_id']);$s=db()->prepare("UPDATE product_requests SET status='cancelled' WHERE id=? AND requester_id=? AND status='open'");$s->execute([$d['request_id'],$u['id']]);if(!$s->rowCount())fail('Request cannot be cancelled',403);out(['success'=>true]);

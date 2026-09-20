@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php'; $a=user();$s=db()->prepare('SELECT id,full_name,shop_name,phone,email,profile_image,role,status,created_at FROM users WHERE id=?');$s->execute([$a['id']]);$u=$s->fetch();if(!$u)fail('User not found',404);out(['success'=>true,'user'=>$u]);

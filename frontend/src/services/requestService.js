@@ -1,0 +1,1 @@
+import api from './api';export const requests=()=>api.get('/requests/list.php');export const createRequest=d=>api.post('/requests/create.php',d);export const acceptRequest=d=>api.post('/requests/accept.php',d);export const cancelRequest=id=>api.post('/requests/reject.php',{request_id:id});export const transfers=()=>api.get('/transfers/history.php');

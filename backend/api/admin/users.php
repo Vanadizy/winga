@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';admin();$s=db()->query('SELECT id,full_name,shop_name,phone,email,role,status,created_at FROM users ORDER BY created_at DESC');out(['success'=>true,'users'=>$s->fetchAll()]);

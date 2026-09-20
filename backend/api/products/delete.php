@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';$u=user();$d=body();required($d,['id']);$s=db()->prepare('DELETE FROM products WHERE id=? AND user_id=? AND status="available"');$s->execute([$d['id'],$u['id']]);if(!$s->rowCount())fail('Only your available products can be deleted',403);out(['success'=>true,'message'=>'Product deleted']);
