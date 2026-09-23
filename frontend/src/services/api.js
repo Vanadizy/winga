@@ -7,6 +7,6 @@ api.interceptors.response.use(
   e=>{
     const data=e.response?.data;
     const message=typeof data==='object'&&data?.message ? data.message : e.response ? `API request failed (${e.response.status}). Check VITE_API_URL and PHP server.` : 'Cannot reach the API. Start the PHP server and check VITE_API_URL.';
-    return Promise.reject({message,status:e.response?.status,errors:typeof data==='object'?data.errors:{}});
+    return Promise.reject({message,status:e.response?.status,errors:typeof data==='object'?data.errors:{},payment_required:typeof data==='object'&&data?.errors?.payment_required===true,payment_whatsapp:typeof data==='object'?data?.errors?.payment_whatsapp:null});
   }
 ); export default api;

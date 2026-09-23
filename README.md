@@ -10,7 +10,15 @@ Multi-seller phone and electronics stock system. The frontend is React/Vite/Tail
 4. Copy `frontend/.env.example` to `frontend/.env.local`. Update `VITE_API_URL` only if you use a different PHP address.
 5. In `frontend/`, run `npm install`, then `npm run dev`.
 
+Keep both terminal windows running while using the application. If the browser shows `net::ERR_CONNECTION_REFUSED` for `localhost:8000`, the PHP API server has stopped or was never started; start it again with `php -S localhost:8000 -t backend` from the project root.
+
 The initial registration flow makes seller accounts. Promote an account to admin directly in MySQL: `UPDATE users SET role='admin' WHERE phone='...'`.
+
+## Subscriptions and administration
+
+Run `database/subscription_migration.sql` once for an existing database. New sellers receive a two-day trial. When trial/subscription time ends, login and protected API access are blocked until an administrator activates a new subscription.
+
+Initial administrator login: phone `ADMIN001`, password `WingaAdmin2026!`. Change the password or create another administrator immediately. Set your actual WhatsApp number in `backend/config/app.php`; sellers use it to send payment receipts.
 
 ## JWT secret
 

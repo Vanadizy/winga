@@ -1,0 +1,1 @@
+<?php require_once __DIR__.'/../_bootstrap.php';admin();$s=db()->query('SELECT l.*,u.full_name actor_name FROM audit_logs l LEFT JOIN users u ON u.id=l.actor_id ORDER BY l.created_at DESC LIMIT 200');out(['success'=>true,'logs'=>$s->fetchAll()]);
