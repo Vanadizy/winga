@@ -1,0 +1,13 @@
+Options -Indexes
+RewriteEngine On
+
+# Leave uploaded files and folders intact.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Public API alias for the PHP files in /backend/api.
+RewriteRule ^api/(.*)$ backend/api/$1 [L,QSA]
+
+# React routes such as /login must return the app entry file on refresh.
+RewriteRule ^ index.html [L]
