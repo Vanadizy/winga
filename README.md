@@ -14,6 +14,14 @@ Keep both terminal windows running while using the application. If the browser s
 
 The initial registration flow makes seller accounts. Promote an account to admin directly in MySQL: `UPDATE users SET role='admin' WHERE phone='...'`.
 
+## Deploying to Rodline
+
+Run `npm install` from the project root, then `npm run build`. The production build is written to the root `dist/` folder and embeds the API URL from `frontend/.env.production`.
+
+Upload the contents of `dist/` to the website document root. Also upload the complete `backend/` folder so the PHP API is available at `https://uza.pangaleo.co.tz/backend/api/`. If your domain differs, change `VITE_API_URL` in `frontend/.env.production` before building. Do not upload `frontend/src` or `node_modules`.
+
+Configure the hosted database credentials in the hosting environment (`WINGA_DB_HOST`, `WINGA_DB_NAME`, `WINGA_DB_USER`, and `WINGA_DB_PASS`) or in `backend/config/database.php`. Import `database/winga_official.sql` and apply the migration SQL files that are missing from that database. Keep PHP and MySQL errors in the hosting logs; a PHP 500 response means the frontend reached the PHP endpoint, but the backend failed, commonly because of database credentials, missing migrations, or PHP configuration.
+
 ## Subscriptions and administration
 
 Run `database/subscription_migration.sql` once for an existing database. New sellers receive a two-day trial. When trial/subscription time ends, login and protected API access are blocked until an administrator activates a new subscription.

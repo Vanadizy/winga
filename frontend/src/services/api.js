@@ -1,6 +1,6 @@
 import axios from 'axios';
-// Set VITE_API_URL in .env.local. Its default matches a PHP server started from backend/.
-const api=axios.create({baseURL:import.meta.env.VITE_API_URL||'http://localhost:8000/api'});
+// Set VITE_API_URL at build time for production. Local development falls back to the PHP server.
+const api=axios.create({baseURL:import.meta.env.VITE_API_URL||(import.meta.env.DEV?'http://localhost:8000/api':'/backend/api')});
 api.interceptors.request.use(c=>{const t=localStorage.getItem('winga_token');if(t)c.headers.Authorization=`Bearer ${t}`;return c});
 api.interceptors.response.use(
   r=>r.data,
