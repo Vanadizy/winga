@@ -2,8 +2,15 @@
 require_once __DIR__.'/../config/jwt.php';
 require_once __DIR__.'/../helpers/response.php';
 function user(): array {
-    $header=$_SERVER['HTTP_AUTHORIZATION']??'';
-    $payload=jwt_decode(preg_replace('/^Bearer\s+/i','',$header));
+    // Apache/PHP-CGI may expose Authorization only after an internal rewrite.
+    $header=$_SERVER['HTTP_AUTHORIZATION']??$_SERVER['REDIRECT_HTTP_AUTHORIZATION']??'';
+    if($header===''&&function_exists('getallheaders')){
+        foreach(getallheaders() as $name=>$value){
+            if(strcasecmp($name,'Authorization')===0){$header=$value;break;}
+        }
+    }
+    $token=preg_replace('/^Bearer\s+/i','',trim($header));
+    $payload=jwt_decode($token);
     if(!$payload) fail('Unauthorized',401);
     $q=db()->prepare('SELECT id,role,status,subscription_end_at,trial_ends_at FROM users WHERE id=?');
     $q->execute([$payload['id']]); $account=$q->fetch();

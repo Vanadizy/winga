@@ -1,16 +1,16 @@
 <?php
-// Edit these fallback values, or configure WINGA_DB_* environment variables.
+// For a new host, edit the four fallback values below or set EMS_DB_* environment variables.
 const DB_HOST = 'localhost';
-const DB_NAME = 'pangaleo_uza';
-const DB_USER = 'pangaleo_admin';
-const DB_PASS = 'pangaleo2026';
+const DB_NAME = 'winga_official';
+const DB_USER = 'root';
+const DB_PASS = '';
 function db(): PDO {
     static $pdo = null;
     if ($pdo) return $pdo;
-    $host = getenv('WINGA_DB_HOST') ?: DB_HOST;
-    $name = getenv('WINGA_DB_NAME') ?: DB_NAME;
-    $username = getenv('WINGA_DB_USER') ?: DB_USER;
-    $password = getenv('WINGA_DB_PASS');
+    $host = getenv('EMS_DB_HOST') ?: DB_HOST;
+    $name = getenv('EMS_DB_NAME') ?: DB_NAME;
+    $username = getenv('EMS_DB_USER') ?: DB_USER;
+    $password = getenv('EMS_DB_PASS');
     $password = $password === false ? DB_PASS : $password;
     $pdo = new PDO("mysql:host={$host};dbname={$name};charset=utf8mb4", $username, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

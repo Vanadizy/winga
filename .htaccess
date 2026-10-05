@@ -1,10 +1,16 @@
 Options -Indexes
 RewriteEngine On
 
+# Preserve bearer tokens when PHP runs through CGI/FastCGI on Apache.
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Leave uploaded files and folders intact.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
+
+# PHP API calls work at the domain root and in project subfolders.
+RewriteRule ^backend/api/(.*)$ backend/api/$1 [L,QSA]
 
 # Public API alias for the PHP files in /backend/api.
 RewriteRule ^api/(.*)$ backend/api/$1 [L,QSA]

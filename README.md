@@ -1,33 +1,23 @@
-# WINGA OFFICIAL
+# EMS — Electronic Management System
 
-Multi-seller phone and electronics stock system. The frontend is React/Vite/Tailwind; the backend is pure PHP with MySQL and JWT authentication.
+EMS is a PHP and React application for managing an electronics shop: inventory, sales, customer purchases, returns, warranties and business reports. The database schema is kept in `database.sql` and has not been changed.
 
-## Run locally
+## Configure the database
 
-1. Import `database/winga_official.sql` into MySQL.
-2. Set your MySQL credentials and a production JWT secret in `backend/config/database.php` and `backend/config/jwt.php`.
-3. For local development, run `php -S localhost:8000 -t backend` from the project root (or serve `backend/` through Apache; ensure `backend/uploads/` is writable).
-4. Copy `frontend/.env.example` to `frontend/.env.local`. Update `VITE_API_URL` only if you use a different PHP address.
-5. In `frontend/`, run `npm install`, then `npm run dev`.
+Open `backend/config/database.php` and set `DB_NAME`, `DB_USER` and `DB_PASS` for the target hosting account. `DB_HOST` normally remains `localhost`. Alternatively, configure `EMS_DB_HOST`, `EMS_DB_NAME`, `EMS_DB_USER` and `EMS_DB_PASS` as server environment variables. Import the supplied `database.sql` and apply only the migration files needed by the features you use.
 
-Keep both terminal windows running while using the application. If the browser shows `net::ERR_CONNECTION_REFUSED` for `localhost:8000`, the PHP API server has stopped or was never started; start it again with `php -S localhost:8000 -t backend` from the project root.
+## Build and host
 
-The initial registration flow makes seller accounts. Promote an account to admin directly in MySQL: `UPDATE users SET role='admin' WHERE phone='...'`.
+1. Install Node.js and PHP with the MySQL PDO driver on the build and hosting machines.
+2. Run `npm install --prefix frontend` and `npm run build` from this project directory.
+3. Copy the contents of `dist/` and the `backend/` folder to your web root or a subdirectory. Keep the generated `assets/` folder beside `index.html` and keep `backend/` beside it.
+4. Point the domain or subdirectory to `index.html`. The included `.htaccess` routes API requests to PHP and refreshes React routes. Apache must have `mod_rewrite` enabled and allow `.htaccess` overrides.
+5. Import the existing database schema, then set the connection values above.
 
-## Deploying to Rodline
+The build uses relative asset and API paths by default, so it works in the domain root and in a subfolder without changing the frontend code. If the PHP API is hosted on a separate domain, set `VITE_API_URL` in `frontend/.env.production` to its absolute API URL before building.
 
-Run `npm install` from the project root, then `npm run build`. The production build is written to the root `dist/` folder and embeds the API URL from `frontend/.env.production`.
+## Local development
 
-Upload the contents of `dist/` to the website document root. Also upload the complete `backend/` folder so the PHP API is available at `https://uza.pangaleo.co.tz/backend/api/`. If your domain differs, change `VITE_API_URL` in `frontend/.env.production` before building. Do not upload `frontend/src` or `node_modules`.
+Run the Vite frontend with `npm run dev --prefix frontend`. Configure `VITE_API_URL` in `frontend/.env.local` if PHP runs on a separate port. For a same-origin setup under Apache, use the project root `index.html` and `.htaccess`.
 
-Configure the hosted database credentials in the hosting environment (`WINGA_DB_HOST`, `WINGA_DB_NAME`, `WINGA_DB_USER`, and `WINGA_DB_PASS`) or in `backend/config/database.php`. Import `database/winga_official.sql` and apply the migration SQL files that are missing from that database. Keep PHP and MySQL errors in the hosting logs; a PHP 500 response means the frontend reached the PHP endpoint, but the backend failed, commonly because of database credentials, missing migrations, or PHP configuration.
-
-## Subscriptions and administration
-
-Run `database/subscription_migration.sql` once for an existing database. New sellers receive a two-day trial. When trial/subscription time ends, login and protected API access are blocked until an administrator activates a new subscription.
-
-Initial administrator login: phone `ADMIN001`, password `WingaAdmin2026!`. Change the password or create another administrator immediately. Set your actual WhatsApp number in `backend/config/app.php`; sellers use it to send payment receipts.
-
-## JWT secret
-
-You do not obtain a JWT token or secret from another website. On login, the API creates the JWT token automatically and the frontend saves it. Set `JWT_SECRET` in `backend/config/jwt.php` to a unique random string before deployment. Generate one with `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"` and keep it private; do not place it in the frontend.
+Product photos are stored under `backend/uploads/`; ensure PHP can write to that directory. Do not upload `frontend/node_modules` or the frontend source when deploying the built site.
