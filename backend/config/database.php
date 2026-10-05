@@ -1,9 +1,9 @@
 <?php
 // For a new host, edit the four fallback values below or set EMS_DB_* environment variables.
 const DB_HOST = 'localhost';
-const DB_NAME = 'winga_official';
-const DB_USER = 'root';
-const DB_PASS = '';
+const DB_NAME = 'pangaleo_uza';
+const DB_USER = 'pangaleo_admin';
+const DB_PASS = 'pangaleo2026';
 function db(): PDO {
     static $pdo = null;
     if ($pdo) return $pdo;
