@@ -1,4 +1,9 @@
-export const imageUrl=path=>path?`${import.meta.env.BASE_URL}backend/${path}`:'';
+export const imageUrl=path=>{
+  if(!path)return '';
+  if(/^(https?:|data:|blob:)/i.test(path))return path;
+  const clean=String(path).replace(/\\/g,'/').replace(/^\/+/, '').replace(/^(backend\/)+/i,'');
+  return `${import.meta.env.BASE_URL}backend/${clean}`;
+};
 
 export function imageAsDataUrl(path){
   return new Promise((resolve,reject)=>{
